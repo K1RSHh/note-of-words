@@ -57,7 +57,7 @@ const AuthModal = ({ onClose }: { onClose: () => void }) => {
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        layout // Дозволяє формі плавно змінювати розмір
+        layout
         className="bg-neutral-900 p-8 rounded-[2rem] shadow-2xl w-full max-w-md border border-neutral-800"
       >
         <div className="flex justify-between items-center mb-8">
