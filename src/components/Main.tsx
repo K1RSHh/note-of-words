@@ -22,7 +22,7 @@ function Main() {
       <main className="max-w-4xl mx-auto">
         <WordList />
         <p className="text-center text-gray-400 mt-20">
-          Press + to add the first word
+          Press + to add a new word
         </p>
       </main>
 
