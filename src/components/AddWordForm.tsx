@@ -104,7 +104,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         layout
-        className="flex relative flex-col gap-4 p-6 bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-800 w-full max-w-md animate-in fade-in zoom-in"
+        className="flex relative flex-col gap-4 p-6 bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-800 w-full max-w-md"
       >
         <div className="flex justify-between items-center ">
           <h2 className="text-xl font-bold text-white">New word</h2>
