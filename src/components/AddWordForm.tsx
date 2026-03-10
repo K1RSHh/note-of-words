@@ -24,8 +24,6 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      // 1. Тепер перевірка довжини слова всередині таймера
-      // Це робить виклик setSuggestions асинхронним
       if (original.length < 2) {
         setSuggestions([]);
         return;
@@ -36,16 +34,14 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
           `https://api.datamuse.com/sug?s=${original}`,
         );
 
-        // Типізуємо отримані дані як масив наших об'єктів
         const data: IDatamuseSuggestion[] = await response.json();
 
-        // Тепер TypeScript знає, що у 'item' є поле 'word', і нам не потрібен 'any'
         setSuggestions(data.slice(0, 5).map((item) => item.word));
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "API Error";
         console.error(message);
       }
-    }, 300); // Наш Debounce на 300мс
+    }, 300);
 
     //
     return () => clearTimeout(timer);
