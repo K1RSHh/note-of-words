@@ -49,7 +49,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
           type="text"
           value={original}
           onChange={(e) => setOriginal(e.target.value)}
-          placeholder="Слово англійською"
+          placeholder="Original word"
           className="px-4 py-3 border-2 bg-white text-black placeholder-neutral-500 border-gray-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all"
         />
 
@@ -57,7 +57,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
           type="text"
           value={translation}
           onChange={(e) => setTranslation(e.target.value)}
-          placeholder="Переклад"
+          placeholder="Translation"
           className="px-4 py-3 border-2 bg-white text-black placeholder-neutral-500 border-white rounded-xl focus:border-blue-500 focus:outline-none transition-all"
         />
 
