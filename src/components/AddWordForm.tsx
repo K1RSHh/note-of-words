@@ -18,13 +18,14 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
   const [translation, setTranslation] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const addWord = useWordStore((state) => state.addWord);
   const user = useWordStore((state) => state.user);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if (original.length < 2) {
+      if (!showDropdown || original.length < 2) {
         setSuggestions([]);
         return;
       }
@@ -33,22 +34,40 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
         const response = await fetch(
           `https://api.datamuse.com/sug?s=${original}`,
         );
-
         const data: IDatamuseSuggestion[] = await response.json();
-
         setSuggestions(data.slice(0, 5).map((item) => item.word));
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : "API Error";
-        console.error(message);
+      } catch (e) {
+        console.error(e);
       }
     }, 300);
 
-    //
     return () => clearTimeout(timer);
-  }, [original]);
+  }, [original, showDropdown]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOriginal(e.target.value);
+    setShowDropdown(true); // Вмикаємо підказки при друку
+    setSelectedIndex(-1);
+  };
+
+  const selectWord = (word: string) => {
+    setOriginal(word);
+    setSuggestions([]);
+    setShowDropdown(false); // ВИМИКАЄМО підказки після вибору
+    setSelectedIndex(-1);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (suggestions.length === 0) return;
+
+    if (e.key === "Tab" || e.key === "Enter") {
+      if (selectedIndex >= 0) {
+        e.preventDefault();
+        selectWord(suggestions[selectedIndex]);
+      } else {
+        setShowDropdown(false);
+      }
+    }
 
     if (e.key === "ArrowDown") {
       setSelectedIndex((prev) =>
@@ -123,15 +142,12 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             type="text"
             value={original}
             onKeyDown={handleKeyDown}
-            onChange={(e) => {
-              setOriginal(e.target.value);
-              setSelectedIndex(-1);
-            }}
+            onChange={handleChange}
             placeholder="Start typing a word..."
             className="px-4 py-3 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
           />
           <AnimatePresence>
-            {suggestions.length > 0 && (
+            {showDropdown && suggestions.length > 0 && (
               <motion.ul
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -141,10 +157,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
                 {suggestions.map((sug, index) => (
                   <li
                     key={sug}
-                    onClick={() => {
-                      setOriginal(sug);
-                      setSuggestions([]);
-                    }}
+                    onClick={() => selectWord(sug)}
                     className={`px-4 py-2 cursor-pointer transition-colors ${
                       index === selectedIndex
                         ? "bg-blue-600 text-white"
