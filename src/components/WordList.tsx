@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { Trash2, Search } from "lucide-react";
 import WordFilters from "./WordFilters";
 
-
 function WordList() {
   const { words, removeWord, sortType, searchTerm, setSearchTerm } =
     useWordStore();
@@ -45,7 +44,7 @@ function WordList() {
 
       {/* Table header */}
       <div className="flex text-2xl font-bold p-4 bg-neutral-200 rounded-t-2xl text-black border-b-2 border-neutral-300">
-        <p className="w-1/2">Original</p>
+        <p className="w-1/2">Word</p>
         <p className="w-1/2">Translation</p>
       </div>
 
