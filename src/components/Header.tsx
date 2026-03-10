@@ -49,10 +49,12 @@ function Header() {
             // Status: Guest
             <motion.button
               key="guest"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onClick={() => setIsAuthOpen(true)}
-              className="px-6 py-2 bg-neutral-100 text-black font-bold rounded-xl hover:bg-white transition-all shadow-md cursor-pointer"
+              className="px-6 py-2 bg-neutral-100 text-black font-bold rounded-xl shadow-md cursor-pointer"
             >
               Login
             </motion.button>
