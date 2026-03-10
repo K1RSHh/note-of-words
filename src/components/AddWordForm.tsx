@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useWordStore from "../store/WordStore";
 import { motion } from "motion/react";
+import { toast } from "react-hot-toast";
 
 interface AddWordFormProps {
   onClose: () => void;
@@ -9,17 +10,23 @@ interface AddWordFormProps {
 const AddWordForm = ({ onClose }: AddWordFormProps) => {
   const [original, setOriginal] = useState("");
   const [translation, setTranslation] = useState("");
-  const addWord = useWordStore((state) => state.addWord); //
+  const addWord = useWordStore((state) => state.addWord);
+  const user = useWordStore((state) => state.user);
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error("Увійдіть в акаунт, щоб додати слово");
+      return;
+    }
+
     if (!original.trim() || !translation.trim()) return;
 
     addWord({
-      id: crypto.randomUUID(),
       original: original.trim(),
       translation: translation.trim(),
-      userId: "user_1",
+      userId: user.uid,
       createdAt: Date.now(),
       progress: 0,
     });

@@ -1,76 +1,120 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { db, auth } from "../firebase"; // Твій конфіг Firebase
+import { onAuthStateChanged } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { type User as FirebaseUser } from "firebase/auth"; //
 import { toast } from "react-hot-toast";
-
-export interface IWord {
-  id: string;
-  original: string;
-  translation: string;
-  userId: string;
-  createdAt: number;
-  progress: number;
-  tags?: string[];
-}
+import type { IWord, TCreateWord } from "../types/word"; //
 
 type SortType = "latest" | "alphabet";
 
 interface WordState {
   words: IWord[];
-  removeWord: (id: string) => void;
+  user: FirebaseUser | null;
+  loading: boolean;
   sortType: SortType;
   searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  addWord: (newWord: IWord) => void;
+
+  initAuth: () => () => void;
+
   setSortType: (type: SortType) => void;
-  clearWords: () => void;
+  setSearchTerm: (term: string) => void;
+  setUser: (user: FirebaseUser | null) => void;
+
+  // Cloud Actions
+  subscribeToWords: (userId: string) => () => void;
+  addWord: (wordData: TCreateWord) => Promise<void>;
+  removeWord: (id: string) => Promise<void>;
+  logOut: () => Promise<void>;
 }
 
-const useWordStore = create<WordState>()(
-  persist(
-    (set, get) => ({
-      words: [],
-      sortType: "latest",
-      searchTerm: "",
+const useWordStore = create<WordState>((set, get) => ({
+  words: [],
+  user: null,
+  loading: false,
+  sortType: "latest",
+  searchTerm: "",
 
-      addWord: (newWord) => {
-        const isDuplicate = get().words.some(
-          (word) =>
-            word.original.toLowerCase() === newWord.original.toLowerCase(),
-        );
+  setSortType: (type) => set({ sortType: type }),
+  setSearchTerm: (term) => set({ searchTerm: term }),
+  setUser: (user) => set({ user }),
 
-        if (isDuplicate) {
-          toast.error(`"${newWord.original}" already on the list`, {
-            style: {
-              borderRadius: "12px",
-              background: "#333",
-              color: "#fff",
-            },
-          });
-          return;
-        }
+  initAuth: () => {
+    return onAuthStateChanged(auth, (firebaseUser) => {
+      set({ user: firebaseUser });
 
-        set((state) => ({
-          words: [newWord, ...state.words],
-        }));
+      if (firebaseUser) {
+        get().subscribeToWords(firebaseUser.uid);
+      } else {
+        // If it worked, clear the list
+        set({ words: [] });
+      }
+    });
+  },
 
-        toast.success("Word added!");
-      },
+  subscribeToWords: (userId) => {
+    set({ loading: true });
+    // Query: only words from this user
+    const q = query(collection(db, "words"), where("userId", "==", userId));
 
-      setSearchTerm: (term) => set({ searchTerm: term }),
+    return onSnapshot(q, (snapshot) => {
+      const wordsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as IWord[];
 
-      removeWord: (id) => {
-        set({ words: get().words.filter((word) => word.id !== id) });
-        toast.success("Word deleted");
-      },
+      set({ words: wordsData, loading: false });
+    });
+  },
 
-      setSortType: (type) => set({ sortType: type }),
+  // Adding a word with duplicate check
+  addWord: async (wordData) => {
+    const isDuplicate = get().words.some(
+      (w) => w.original.toLowerCase() === wordData.original.toLowerCase(),
+    );
 
-      clearWords: () => set({ words: [] }),
-    }),
-    {
-      name: "words-storage",
-    },
-  ),
-);
+    if (isDuplicate) {
+      toast.error(`"${wordData.original}" already on your list`);
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "words"), wordData);
+      toast.success("The word is recorded");
+    } catch {
+      toast.error(`Error saving`);
+    }
+  },
+
+  // Deleting a word
+  removeWord: async (id) => {
+    try {
+      await deleteDoc(doc(db, "words", id));
+      toast.success("Word successfully deleted");
+    } catch {
+      toast.error("Unable to delete word");
+    }
+  },
+
+  // Logging out of your account
+  logOut: async () => {
+    try {
+      await signOut(auth);
+      set({ words: [], user: null }); // Clear the page after exit
+      toast.success("You have successfully logged out of your account.");
+    } catch {
+      toast.error("Error during exit");
+    }
+  },
+}));
 
 export default useWordStore;
