@@ -1,13 +1,15 @@
 import AddWordForm from "./AddWordForm";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import WordList from "./WordList";
+import useWordStore from "../store/WordStore";
 
 function Main() {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [words] = useWordStore((state) => state.words);
 
   return (
-    <div className="min-h-screen p-6 relative">
+    <div className="w-full p-6 relative">
       <div className="max-w-5xl mx-auto flex justify-between items-center mb-8">
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -21,9 +23,35 @@ function Main() {
 
       <main className="max-w-5xl mx-auto">
         <WordList />
-        <p className="text-center text-gray-400 mt-20">
-          Press + to add a new word
-        </p>
+        {words ? (
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              layout
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <p className="text-center text-gray-400 mt-20">
+                Press + to add a new word
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        ) : (
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              layout
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <p className="text-center text-gray-400 mt-20">
+                Press + to add a first word
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        )}
       </main>
 
       {isFormOpen && <AddWordForm onClose={() => setIsFormOpen(false)} />}
