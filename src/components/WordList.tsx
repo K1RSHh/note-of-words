@@ -44,8 +44,8 @@ function WordList() {
 
       {/* Table header */}
       <div className="flex text-2xl font-bold p-4 bg-neutral-200 rounded-t-2xl text-black border-b-2 border-neutral-300">
-        <p className="w-1/2">Word</p>
-        <p className="w-1/2">Translation</p>
+        <p className="w-1/2 mr-4">Word</p>
+        <p className="w-1/2 ml-4">Translation</p>
       </div>
 
       <div className="flex flex-col bg-neutral-100 shadow-xl rounded-b-2xl overflow-hidden">
@@ -60,11 +60,11 @@ function WordList() {
               transition={{ duration: 0.2 }}
               className="text-black text-xl flex border-b border-neutral-200 h-full text-center bg-white hover:bg-blue-50 transition-colors"
             >
-              <div className="w-1/2 border-r overflow-hidden border-neutral-200 p-4">
+              <div className="w-1/2 border-r overflow-hidden border-neutral-200 p-4 wrap-break-word">
                 {word.original}
               </div>
               <div className="w-1/2 overflow-hidden relative p-4 flex items-center justify-center">
-                {word.translation}
+                <div className="wrap-anywhere">{word.translation}</div>
                 <motion.button
                   whileHover={{ scale: 1.2, rotate: 9 }}
                   whileTap={{ scale: 0.8 }}

@@ -8,7 +8,7 @@ function Main() {
 
   return (
     <div className="min-h-screen p-6 relative">
-      <header className="max-w-4xl mx-auto flex justify-between items-center mb-8">
+      <div className="max-w-5xl mx-auto flex justify-between items-center mb-8">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -17,9 +17,9 @@ function Main() {
         >
           +
         </motion.button>
-      </header>
+      </div>
 
-      <main className="max-w-4xl mx-auto">
+      <main className="max-w-5xl mx-auto">
         <WordList />
         <p className="text-center text-gray-400 mt-20">
           Press + to add a new word
