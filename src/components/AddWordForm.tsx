@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useWordStore from "../store/WordStore";
 import { motion, AnimatePresence } from "motion/react";
+import { X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 
@@ -46,14 +47,15 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOriginal(e.target.value);
-    setShowDropdown(true); // Вмикаємо підказки при друку
+    setShowDropdown(true);
     setSelectedIndex(-1);
   };
 
   const selectWord = (word: string) => {
-    setOriginal(word);
+    const formatted = word.charAt(0).toUpperCase() + word.slice(1);
+    setOriginal(formatted);
     setSuggestions([]);
-    setShowDropdown(false); // ВИМИКАЄМО підказки після вибору
+    setShowDropdown(false);
     setSelectedIndex(-1);
   };
 
@@ -78,7 +80,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
     } else if (e.key === "Tab" || e.key === "Enter") {
       if (selectedIndex >= 0) {
         e.preventDefault();
-        setOriginal(suggestions[selectedIndex]);
+        selectWord(suggestions[selectedIndex]);
         setSuggestions([]);
         setSelectedIndex(-1);
       }
@@ -90,8 +92,11 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
     if (!user) return toast.error("Please login");
     if (!original.trim() || !translation.trim()) return;
 
+    const finalWord =
+      original.trim().charAt(0).toUpperCase() + original.trim().slice(1);
+
     await addWord({
-      original: original.trim(),
+      original: finalWord,
       translation: translation.trim(),
       userId: user.uid,
       createdAt: Date.now(),
@@ -146,19 +151,26 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             placeholder="Start typing a word..."
             className="px-4 py-3 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
           />
+          <motion.button
+            onClick={() => setOriginal("")}
+            whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+            className="absolute right-2 top-1/4 cursor-pointer"
+          >
+            <X />
+          </motion.button>
           <AnimatePresence>
             {showDropdown && suggestions.length > 0 && (
               <motion.ul
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="absolute left-0 right-0 mt-2 bg-neutral-700 rounded-xl overflow-hidden shadow-2xl z-[60] border border-neutral-600"
+                className="absolute left-0 right-0 mt-2 bg-neutral-700 rounded-xl overflow-hidden shadow-2xl z-50 border border-neutral-600"
               >
                 {suggestions.map((sug, index) => (
                   <li
                     key={sug}
                     onClick={() => selectWord(sug)}
-                    className={`px-4 py-2 cursor-pointer transition-colors ${
+                    className={`px-4 py-2 cursor-pointer first-letter:uppercase transition-colors ${
                       index === selectedIndex
                         ? "bg-blue-600 text-white"
                         : "text-neutral-300 hover:bg-neutral-600"
@@ -172,13 +184,22 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
           </AnimatePresence>
         </div>
 
-        <input
-          type="text"
-          value={translation}
-          onChange={(e) => setTranslation(e.target.value)}
-          placeholder="Translation"
-          className="px-4 py-3 rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            value={translation}
+            onChange={(e) => setTranslation(e.target.value)}
+            placeholder="Translation"
+            className="px-4 py-3 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+          />
+          <motion.button
+            onClick={() => setTranslation("")}
+            whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+            className="absolute right-2 top-1/4 cursor-pointer"
+          >
+            <X />
+          </motion.button>
+        </div>
 
         <div className="flex gap-3 mt-2">
           <motion.button

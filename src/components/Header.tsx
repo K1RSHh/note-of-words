@@ -39,7 +39,7 @@ function Header() {
                   onClick={logOut} //
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="absolute top-14 right-0 bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-2xl opacity-0 group-hover:opacity-100 transition-all flex items-center gap-2 whitespace-nowrap z-50 cursor-pointer"
+                  className="absolute top-14 right-0 bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-2xl opacity-0 group-hover:opacity-100 flex items-center gap-2 whitespace-nowrap z-50 cursor-pointer"
                 >
                   <LogOut size={14} /> Logout
                 </motion.button>
