@@ -119,13 +119,30 @@ function WordList() {
                               : "bg-transparent text-neutral-300 hover:bg-neutral-700"
                           }`}
                         >
-                          {s === "all"
-                            ? "All Words"
-                            : s === "unknown"
-                              ? "Don't know"
-                              : s === "learning"
-                                ? "Learning"
-                                : "Learned"}
+                          {s === "all" ? (
+                            "All Words"
+                          ) : s === "unknown" ? (
+                            <div className="flex items-center gap-3">
+                              <p>Don't know</p>
+                              <div
+                                className={`w-3 h-3 left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${statusColors.unknown}`}
+                              ></div>
+                            </div>
+                          ) : s === "learning" ? (
+                            <div className="flex items-center gap-3">
+                              <p>learning</p>
+                              <div
+                                className={`w-3 h-3 left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${statusColors.learning}`}
+                              ></div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-3">
+                              <p>Learned</p>
+                              <div
+                                className={`w-3 h-3 left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${statusColors.learned}`}
+                              ></div>
+                            </div>
+                          )}
                         </button>
                       ),
                     )}
