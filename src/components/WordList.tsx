@@ -182,7 +182,7 @@ function WordList() {
                   title={word.status}
                 />
 
-                <p className="flex justify-center w-full items-center wrap-break-word">
+                <p className="flex justify-center w-full items-center wrap-anywhere">
                   {word.original}
                 </p>
               </div>
