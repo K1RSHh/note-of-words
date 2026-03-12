@@ -18,7 +18,6 @@ const AuthModal = ({ onClose }: { onClose: () => void }) => {
     const loadingToast = toast.loading(
       isLogin ? "Signing in..." : "Creating account...",
     );
-
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
@@ -58,7 +57,7 @@ const AuthModal = ({ onClose }: { onClose: () => void }) => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         layout
-        className="bg-neutral-900 p-8 rounded-[2rem] shadow-2xl w-full max-w-md border border-neutral-800"
+        className="bg-neutral-900 p-8 rounded-4xl shadow-2xl w-full max-w-md border border-neutral-800"
       >
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-black text-white tracking-tight">

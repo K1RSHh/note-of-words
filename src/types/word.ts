@@ -1,11 +1,14 @@
-export interface IWord {
-  id: string; // Document ID від Firebase
-  original: string; // Слово
-  translation: string; // Переклад
-  userId: string; // Прив'язка до акаунту
-  createdAt: number; // Дата створення
-  progress: number; // Прогрес вивчення
-  tags?: string[]; // Теги (опціонально)
-}
-
 export type TCreateWord = Omit<IWord, "id">;
+
+export type TWordStatus = "unknown" | "learning" | "learned";
+
+export interface IWord {
+  id: string; // Document ID from Firebase
+  original: string; // Word
+  status: TWordStatus;
+  translation: string; // Translation
+  userId: string; // Acc
+  createdAt: number; // Date of creation
+  progress: number; // Progress in learning
+  tags?: string[]; // Tags (optional)
+}

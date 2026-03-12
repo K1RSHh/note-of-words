@@ -9,11 +9,12 @@ import {
   onSnapshot,
   query,
   where,
+  updateDoc,
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { type User as FirebaseUser } from "firebase/auth"; //
 import { toast } from "react-hot-toast";
-import type { IWord, TCreateWord } from "../types/word"; //
+import type { IWord, TCreateWord, TWordStatus } from "../types/word"; //
 
 type SortType = "latest" | "alphabet";
 
@@ -23,8 +24,11 @@ interface WordState {
   loading: boolean;
   sortType: SortType;
   searchTerm: string;
+  filterStatus: TWordStatus | "all";
 
   initAuth: () => () => void;
+  updateWord: (id: string, updates: Partial<IWord>) => Promise<void>;
+  setFilterStatus: (status: TWordStatus | "all") => void;
 
   setSortType: (type: SortType) => void;
   setSearchTerm: (term: string) => void;
@@ -43,10 +47,23 @@ const useWordStore = create<WordState>((set, get) => ({
   loading: false,
   sortType: "latest",
   searchTerm: "",
+  filterStatus: "all",
 
   setSortType: (type) => set({ sortType: type }),
   setSearchTerm: (term) => set({ searchTerm: term }),
   setUser: (user) => set({ user }),
+
+  setFilterStatus: (status) => set({ filterStatus: status }),
+
+  updateWord: async (id, updates) => {
+    try {
+      const wordRef = doc(db, "words", id);
+      await updateDoc(wordRef, updates);
+      toast.success("Updated!");
+    } catch {
+      toast.error("Update failed");
+    }
+  },
 
   initAuth: () => {
     return onAuthStateChanged(auth, (firebaseUser) => {

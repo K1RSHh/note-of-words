@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useWordStore from "../store/WordStore";
+import type { TWordStatus } from "../types/word";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
 import { toast } from "react-hot-toast";
@@ -20,6 +21,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [status, setStatus] = useState<TWordStatus>("unknown");
 
   const addWord = useWordStore((state) => state.addWord);
   const user = useWordStore((state) => state.user);
@@ -101,6 +103,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
       userId: user.uid,
       createdAt: Date.now(),
       progress: 0,
+      status: status,
     });
 
     onClose();
@@ -200,7 +203,26 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             <X />
           </motion.button>
         </div>
-
+        <div className="flex gap-2">
+          {(["unknown", "learning", "learned"] as TWordStatus[]).map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setStatus(s)}
+              className={`flex-1 cursor-pointer py-2 rounded-xl text-xs font-bold transition-all ${
+                status === s
+                  ? "bg-blue-600 text-white ring-2 ring-blue-400"
+                  : "bg-neutral-700 text-neutral-400 hover:bg-neutral-600"
+              }`}
+            >
+              {s === "unknown"
+                ? "Don't know"
+                : s === "learning"
+                  ? "Learning"
+                  : "Learned"}
+            </button>
+          ))}
+        </div>
         <div className="flex gap-3 mt-2">
           <motion.button
             whileHover={{ scale: 1.05 }}
