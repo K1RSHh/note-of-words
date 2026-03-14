@@ -159,7 +159,7 @@ function WordList() {
       </div>
 
       {/* Table header */}
-      <div className="flex max-w-6xl w-full m-auto text-2xl text-white font-bold p-4 border-2 bg-neutral-800 rounded-3xl border-neutral-300">
+      <div className="flex max-w-6xl w-full m-auto text-2xl text-white font-bold p-4 border-2 bg-neutral-800 rounded-3xl border-neutral-600">
         <p className="w-1/2 mr-4">Word</p>
         <p className="w-1/2 ml-4">Translation</p>
       </div>
@@ -176,8 +176,8 @@ function WordList() {
               transition={{ duration: 0.2 }}
               className="text-white relative w-full m-auto justify-center text-xl flex mt-3 h-full text-center rounded-3xl"
             >
-              <div className="flex max-w-6xl w-full border-2  rounded-3xl bg-neutral-800">
-                <div className="w-1/2  mt flex items-center border-r-2 border-neutral-300 p-4 overflow-hidden">
+              <div className="flex max-w-6xl w-full border-2 border-neutral-600 rounded-3xl bg-neutral-800">
+                <div className="w-1/2  mt flex items-center border-r-2 border-neutral-600 p-4 overflow-hidden">
                   <div
                     className={`w-3 h-3 absolute left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${
                       statusColors[word.status as keyof typeof statusColors] ||
@@ -190,7 +190,7 @@ function WordList() {
                     {word.original}
                   </p>
                 </div>
-                <div className="w-1/2 overflow-hidden relative p-4 border-l border-neutral-300 flex items-center justify-center">
+                <div className="w-1/2 overflow-hidden relative p-4 border-l border-neutral-600 flex items-center justify-center">
                   <div className="wrap-anywhere">{word.translation}</div>
 
                   {editingWord && (
