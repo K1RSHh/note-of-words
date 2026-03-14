@@ -33,6 +33,7 @@ interface WordState {
   setSortType: (type: SortType) => void;
   setSearchTerm: (term: string) => void;
   setUser: (user: FirebaseUser | null) => void;
+  toggleWordStatus: (id: string) => void;
 
   // Cloud Actions
   subscribeToWords: (userId: string) => () => void;
@@ -54,6 +55,33 @@ const useWordStore = create<WordState>((set, get) => ({
   setUser: (user) => set({ user }),
 
   setFilterStatus: (status) => set({ filterStatus: status }),
+
+  toggleWordStatus: async (id: string) => {
+    const { words } = get();
+    const wordToUpdate = words.find((w) => w.id === id);
+
+    if (!wordToUpdate) return;
+
+    const statuses: IWord["status"][] = ["unknown", "learning", "learned"];
+    const currentIndex = statuses.indexOf(wordToUpdate.status);
+    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+
+    try {
+      const wordRef = doc(db, "words", id);
+      await updateDoc(wordRef, {
+        status: nextStatus,
+      });
+
+      set((state) => ({
+        words: state.words.map((w) =>
+          w.id === id ? { ...w, status: nextStatus } : w,
+        ),
+      }));
+      toast.success("Status updated!");
+    } catch (error) {
+      console.error(error);
+    }
+  },
 
   updateWord: async (id, updates) => {
     try {

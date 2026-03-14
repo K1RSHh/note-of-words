@@ -1,7 +1,16 @@
 import useWordStore from "../store/WordStore";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Trash2, Search, ListFilter, Menu, PenLine } from "lucide-react";
+import {
+  Trash2,
+  Search,
+  ListFilter,
+  Menu,
+  PenLine,
+  Check,
+  X,
+  Clock3,
+} from "lucide-react";
 import WordFilters from "./WordFilters";
 import EditWordModal from "./EditWordModal";
 import type { IWord } from "../types/word";
@@ -15,6 +24,7 @@ function WordList() {
     setSearchTerm,
     filterStatus,
     setFilterStatus,
+    toggleWordStatus,
   } = useWordStore();
 
   const [editingWord, setEditingWord] = useState<IWord | null>(null);
@@ -24,9 +34,21 @@ function WordList() {
   const filterRef = useRef<HTMLDivElement>(null);
 
   const statusColors = {
-    learned: "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]",
-    learning: "bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]",
-    unknown: "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]",
+    learned: (
+      <div className="absolute top-1/3 text-green-500 text-shadow-[0_0_8px_rgba(34,197,94,0.5)]">
+        <Check strokeWidth={2} />
+      </div>
+    ),
+    learning: (
+      <div className="absolute top-1/3 text-yellow-500 text-shadow-[0_0_8px_rgba(234,179,8,0.5)]">
+        <Clock3 />
+      </div>
+    ),
+    unknown: (
+      <div className="absolute top-1/3 text-red-500 text-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+        <X strokeWidth={2} />
+      </div>
+    ),
   };
 
   const handleToggleMenu = (id: string) => {
@@ -128,23 +150,23 @@ function WordList() {
                           ) : s === "unknown" ? (
                             <div className="flex items-center gap-3">
                               <p>Don't know</p>
-                              <div
-                                className={`w-3 h-3 left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${statusColors.unknown}`}
-                              ></div>
+                              <div className="text-red-500 text-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                                <X strokeWidth={2} />
+                              </div>
                             </div>
                           ) : s === "learning" ? (
                             <div className="flex items-center gap-3">
                               <p>learning</p>
-                              <div
-                                className={`w-3 h-3 left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${statusColors.learning}`}
-                              ></div>
+                              <div className="text-yellow-500 text-shadow-[0_0_8px_rgba(234,179,8,0.5)]">
+                                <Clock3 />
+                              </div>
                             </div>
                           ) : (
                             <div className="flex items-center gap-3">
                               <p>Learned</p>
-                              <div
-                                className={`w-3 h-3 left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${statusColors.learned}`}
-                              ></div>
+                              <div className="text-green-500 text-shadow-[0_0_8px_rgba(34,197,94,0.5)]">
+                                <Check strokeWidth={2} />
+                              </div>
                             </div>
                           )}
                         </button>
@@ -176,13 +198,30 @@ function WordList() {
               transition={{ duration: 0.2 }}
               className="text-white relative w-full m-auto justify-center text-xl flex mt-3 h-full text-center rounded-3xl"
             >
+              <motion.button
+                whileTap={{ scale: 0.8 }}
+                whileHover={{ scale: 1.1 }}
+                onClick={() => toggleWordStatus(word.id)}
+                className="top-1/3 absolute left-10 z-10 cursor-pointer"
+                title="Click to change status"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={word.status}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {statusColors[word.status as keyof typeof statusColors] ||
+                      statusColors.unknown}
+                  </motion.div>
+                </AnimatePresence>
+              </motion.button>
               <div className="flex max-w-6xl w-full border-2 border-neutral-600 rounded-3xl bg-neutral-800">
                 <div className="w-1/2  mt flex items-center border-r-2 border-neutral-600 p-4 overflow-hidden">
                   <div
-                    className={`w-3 h-3 absolute left-9 rounded-full mr-4 shrink-0 transition-all duration-300 ${
-                      statusColors[word.status as keyof typeof statusColors] ||
-                      statusColors.unknown
-                    }`}
+                    className={` rounded-full mr-4 shrink-0 transition-all duration-300`}
                     title={word.status}
                   />
 
