@@ -14,7 +14,7 @@ function App() {
     return () => unsubscribe();
   }, [initAuth]);
   return (
-    <div>
+    <div className="m-auto">
       <Home />
       <Main />
       <Toaster position="bottom-left" reverseOrder={false} />

@@ -9,8 +9,8 @@ function Main() {
   const [words] = useWordStore((state) => state.words);
 
   return (
-    <div className="w-full p-6 relative">
-      <div className="max-w-5xl mx-auto flex justify-between items-center mb-8">
+    <div className="w-full m-auto p-6 relative">
+      <div className="max-w-6xl mx-auto flex justify-between items-center mb-8">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -21,7 +21,7 @@ function Main() {
         </motion.button>
       </div>
 
-      <main className="max-w-5xl mx-auto">
+      <main className="mx-auto">
         <WordList />
         {words ? (
           <AnimatePresence mode="popLayout">
