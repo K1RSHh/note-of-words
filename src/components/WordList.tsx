@@ -260,7 +260,7 @@ function WordList() {
                         initial={{ opacity: 0, scale: 0.9, x: -20 }}
                         animate={{ opacity: 1, scale: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                        className="absolute flex left-8 -top-3 gap-4 items-center bg-neutral-800 border-2 border-neutral-600 p-2 rounded-xl shadow-lg z-20"
+                        className="absolute flex left-8 -top-4 gap-4 items-center bg-neutral-800 border-2 border-neutral-600 p-2 rounded-xl shadow-lg z-20"
                       >
                         <button
                           onClick={() => {
