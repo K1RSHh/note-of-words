@@ -240,50 +240,52 @@ function WordList() {
                   )}
                 </div>
               </div>
-              <div className="absolute right-15 flex top-1/3">
-                <motion.button
-                  animate={{ rotate: menuOpen === word.id ? 90 : 0 }}
-                  onClick={() => handleToggleMenu(word.id)}
-                  className="flex cursor-pointer z-10"
-                >
-                  <Menu />
-                </motion.button>
-                <AnimatePresence>
-                  {menuOpen === word.id && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-0"
-                        onClick={() => setMenuOpen(null)}
-                      />
+              <div className="absolute right-15 flex items-center top-1/3">
+                <div className="relative">
+                  <motion.button
+                    animate={{ rotate: menuOpen === word.id ? 90 : 0 }}
+                    onClick={() => handleToggleMenu(word.id)}
+                    className="flex cursor-pointer z-10"
+                  >
+                    <Menu />
+                  </motion.button>
+                  <AnimatePresence>
+                    {menuOpen === word.id && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-0"
+                          onClick={() => setMenuOpen(null)}
+                        />
 
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.9, x: -20 }}
-                        animate={{ opacity: 1, scale: 1, x: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                        className="absolute flex left-8 -top-4 gap-4 items-center bg-neutral-800 border-2 border-neutral-600 p-2 rounded-xl shadow-lg z-20"
-                      >
-                        <button
-                          onClick={() => {
-                            setEditingWord(word);
-                            setMenuOpen(null);
-                          }}
-                          className="p-2 cursor-pointer text-white hover:text-blue-500 transition-colors"
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.9, x: -20 }}
+                          animate={{ opacity: 1, scale: 1, x: 0 }}
+                          exit={{ opacity: 0, scale: 0.9, x: 20 }}
+                          className="absolute flex -top-4 left-8  gap-4 items-center bg-neutral-800 border-2 border-neutral-600 p-2 rounded-xl shadow-lg z-20"
                         >
-                          <PenLine size={20} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            removeWord(word.id);
-                            setMenuOpen(null);
-                          }}
-                          className="p-2 cursor-pointer text-neutral-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 size={20} />
-                        </button>
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
+                          <button
+                            onClick={() => {
+                              setEditingWord(word);
+                              setMenuOpen(null);
+                            }}
+                            className="p-2 cursor-pointer text-white hover:text-blue-500 transition-colors"
+                          >
+                            <PenLine size={20} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              removeWord(word.id);
+                              setMenuOpen(null);
+                            }}
+                            className="p-2 cursor-pointer text-neutral-300 hover:text-red-500 transition-colors"
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </motion.div>
           ))}
