@@ -186,7 +186,7 @@ function WordList() {
         <p className="w-1/2 ml-4">Translation</p>
       </div>
 
-      <div className="flex flex-col w-full shadow-xl rounded-b-2xl">
+      <div className="flex flex-col w-full rounded-b-2xl">
         <AnimatePresence mode="popLayout">
           {sortedWords.map((word) => (
             <motion.div
