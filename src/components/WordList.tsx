@@ -10,6 +10,8 @@ import {
   Check,
   X,
   Clock3,
+  CirclePlus,
+  CircleX,
 } from "lucide-react";
 import WordFilters from "./WordFilters";
 import EditWordModal from "./EditWordModal";
@@ -30,6 +32,7 @@ function WordList() {
   const [editingWord, setEditingWord] = useState<IWord | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [contextOpen, setContextOpen] = useState(false);
 
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -202,7 +205,7 @@ function WordList() {
                 whileTap={{ scale: 0.8 }}
                 whileHover={{ scale: 1.1 }}
                 onClick={() => toggleWordStatus(word.id)}
-                className="top-1/3 absolute left-10 z-10 cursor-pointer"
+                className="top-5.5 absolute left-10 z-10 cursor-pointer"
                 title="Click to change status"
               >
                 <AnimatePresence mode="wait">
@@ -218,29 +221,80 @@ function WordList() {
                   </motion.div>
                 </AnimatePresence>
               </motion.button>
-              <div className="flex max-w-6xl w-full border-2 border-neutral-600 rounded-3xl bg-neutral-800">
-                <div className="w-1/2  mt flex items-center border-r-2 border-neutral-600 p-4 overflow-hidden">
-                  <div
-                    className={` rounded-full mr-4 shrink-0 transition-all duration-300`}
-                    title={word.status}
-                  />
-
-                  <p className="flex justify-center w-full items-center wrap-anywhere">
-                    {word.original}
-                  </p>
-                </div>
-                <div className="w-1/2 overflow-hidden relative p-4 border-l border-neutral-600 flex items-center justify-center">
-                  <div className="wrap-anywhere">{word.translation}</div>
-
-                  {editingWord && (
-                    <EditWordModal
-                      word={editingWord}
-                      onClose={() => setEditingWord(null)}
+              <div className="max-w-6xl w-full">
+                <div className="flex max-w-6xl w-full border-2 border-neutral-600 rounded-3xl bg-neutral-800">
+                  <div className="w-1/2 flex items-center border-r-2 border-neutral-600 p-4 overflow-hidden">
+                    <div
+                      className={` rounded-full mr-4 shrink-0 transition-all duration-300`}
+                      title={word.status}
                     />
-                  )}
+
+                    <p className="flex justify-center w-full items-center wrap-anywhere">
+                      {word.original}
+                    </p>
+                  </div>
+                  <div className="w-1/2 overflow-hidden relative p-4 border-l border-neutral-600 flex items-center justify-center">
+                    <div className="wrap-anywhere">{word.translation}</div>
+
+                    {editingWord && (
+                      <EditWordModal
+                        word={editingWord}
+                        onClose={() => setEditingWord(null)}
+                      />
+                    )}
+                  </div>
                 </div>
+                {word.context && (
+                  <div>
+                    <div className="flex mt-3">
+                      {contextOpen || false ? (
+                        <motion.button
+                          className="cursor-pointer"
+                          onClick={() => setContextOpen(!contextOpen)}
+                        >
+                          <CircleX color="#d4d4d4" strokeWidth={2.5} />
+                        </motion.button>
+                      ) : (
+                        <motion.button
+                          className="cursor-pointer"
+                          onClick={() => setContextOpen(!contextOpen)}
+                        >
+                          <CirclePlus color="#d4d4d4" strokeWidth={2.5} />
+                        </motion.button>
+                      )}
+                    </div>
+                    {contextOpen && (
+                      <AnimatePresence>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="flex max-w-6xl w-full mt-3 border-2 border-neutral-600 rounded-3xl bg-neutral-800"
+                        >
+                          <div className="w-1/2  mt flex items-center border-r-2 border-neutral-600 p-4 overflow-hidden">
+                            <p className="flex justify-center w-full items-center wrap-anywhere">
+                              {word.context}
+                            </p>
+                          </div>
+                          <div className="w-1/2 overflow-hidden relative p-4 border-l border-neutral-600 flex items-center justify-center">
+                            <div className="wrap-anywhere">
+                              {word.contextTranslate}
+                            </div>
+
+                            {editingWord && (
+                              <EditWordModal
+                                word={editingWord}
+                                onClose={() => setEditingWord(null)}
+                              />
+                            )}
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    )}
+                  </div>
+                )}
               </div>
-              <div className="absolute right-15 flex items-center top-1/3">
+              <div className="absolute right-15 flex items-center top-5">
                 <div className="relative">
                   <motion.button
                     animate={{ rotate: menuOpen === word.id ? 90 : 0 }}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useWordStore from "../store/WordStore";
 import { motion } from "motion/react";
+import { X } from "lucide-react";
 import type { IWord, TWordStatus } from "../types/word";
 
 interface EditWordModalProps {
@@ -11,6 +12,10 @@ interface EditWordModalProps {
 const EditWordModal = ({ word, onClose }: EditWordModalProps) => {
   const [original, setOriginal] = useState(word.original);
   const [translation, setTranslation] = useState(word.translation);
+  const [context, setContext] = useState(word.context);
+  const [contextTranslate, setContextTranslate] = useState(
+    word.contextTranslate,
+  );
   const [status, setStatus] = useState<TWordStatus>(word.status || "unknown");
   const updateWord = useWordStore((state) => state.updateWord);
 
@@ -31,6 +36,8 @@ const EditWordModal = ({ word, onClose }: EditWordModalProps) => {
     await updateWord(word.id, {
       original: formattedOriginal,
       translation: translation.trim(),
+      context: context,
+      contextTranslate: contextTranslate,
       status: status,
     });
 
@@ -47,23 +54,79 @@ const EditWordModal = ({ word, onClose }: EditWordModalProps) => {
         animate={{ opacity: 1, scale: 1 }}
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleUpdate}
-        className="flex flex-col gap-4 p-8 bg-neutral-800 rounded-4xl border border-neutral-700 w-full max-w-md"
+        className="flex flex-col gap-4 p-8 bg-neutral-900 rounded-4xl border border-neutral-700 w-full max-w-xl"
       >
         <h2 className="text-2xl font-bold text-white mb-2">Edit word</h2>
 
-        <input
-          type="text"
-          value={original}
-          onChange={(e) => setOriginal(e.target.value)}
-          className="px-5 py-4 bg-neutral-900 text-white rounded-2xl border border-neutral-700 outline-none focus:border-blue-500"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            value={original}
+            onChange={(e) => setOriginal(e.target.value)}
+            placeholder="Original"
+            className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+          />
+          <motion.button
+            type="button"
+            onClick={() => setOriginal("")}
+            whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+            className="absolute right-2 top-1/4 cursor-pointer"
+          >
+            <X />
+          </motion.button>
+        </div>
+        <div className="relative">
+          <input
+            type="text"
+            value={translation}
+            onChange={(e) => setTranslation(e.target.value)}
+            placeholder="Translation"
+            className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+          />
+          <motion.button
+            type="button"
+            onClick={() => setTranslation("")}
+            whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+            className="absolute right-2 top-1/4 cursor-pointer"
+          >
+            <X />
+          </motion.button>
+        </div>
 
-        <input
-          type="text"
-          value={translation}
-          onChange={(e) => setTranslation(e.target.value)}
-          className="px-5 py-4 bg-neutral-900 text-white rounded-2xl border border-neutral-700 outline-none focus:border-blue-500"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            value={context}
+            onChange={(e) => setContext(e.target.value)}
+            placeholder="Context"
+            className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+          />
+          <motion.button
+            type="button"
+            onClick={() => setContext("")}
+            whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+            className="absolute right-2 top-1/4 cursor-pointer"
+          >
+            <X />
+          </motion.button>
+        </div>
+        <div className="relative">
+          <input
+            type="text"
+            value={contextTranslate}
+            onChange={(e) => setContextTranslate(e.target.value)}
+            placeholder="Context transition"
+            className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+          />
+          <motion.button
+            type="button"
+            onClick={() => setContextTranslate("")}
+            whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+            className="absolute right-2 top-1/4 cursor-pointer"
+          >
+            <X />
+          </motion.button>
+        </div>
 
         {/* Choosing a status */}
         <div className="flex flex-col gap-2 mt-2">
