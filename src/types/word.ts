@@ -7,6 +7,8 @@ export interface IWord {
   original: string; // Word
   status: TWordStatus;
   translation: string; // Translation
+  context: string; // Context
+  contextTranslate: string; // Context Translate
   userId: string; // Acc
   createdAt: number; // Date of creation
   progress: number; // Progress in learning

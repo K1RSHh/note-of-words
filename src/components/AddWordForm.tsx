@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
+import { CirclePlus, CircleX } from "lucide-react";
 
 interface AddWordFormProps {
   onClose: () => void;
@@ -18,6 +19,9 @@ interface IDatamuseSuggestion {
 const AddWordForm = ({ onClose }: AddWordFormProps) => {
   const [original, setOriginal] = useState("");
   const [translation, setTranslation] = useState("");
+  const [context, setContext] = useState("");
+  const [contextTranslate, setContextTranslate] = useState("");
+  const [contextOpen, setContextOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -100,6 +104,8 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
     await addWord({
       original: finalWord,
       translation: translation.trim(),
+      context: context,
+      contextTranslate: contextTranslate,
       userId: user.uid,
       createdAt: Date.now(),
       progress: 0,
@@ -143,7 +149,6 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             &times;
           </button>
         </div>
-
         <div className="relative">
           <input
             autoFocus
@@ -203,6 +208,61 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             <X />
           </motion.button>
         </div>
+        <motion.button
+          onClick={() => setContextOpen(!contextOpen)}
+          className="flex w-10 cursor-pointer"
+          whileHover={{ scale: 1.1 }}
+        >
+          {contextOpen || false ? (
+            <CircleX />
+          ) : (
+            <CirclePlus color="#d4d4d4" strokeWidth={2.5} />
+          )}
+        </motion.button>
+        <AnimatePresence>
+          {contextOpen && (
+            <motion.div
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col gap-4"
+            >
+              <div className="relative">
+                <input
+                  type="text"
+                  value={context}
+                  onChange={(e) => setContext(e.target.value)}
+                  placeholder="Context"
+                  className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                />
+                <motion.button
+                  onClick={() => setContext("")}
+                  whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+                  className="absolute right-2 top-1/4 cursor-pointer"
+                >
+                  <X />
+                </motion.button>
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={contextTranslate}
+                  onChange={(e) => setContextTranslate(e.target.value)}
+                  placeholder="Context transition"
+                  className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                />
+                <motion.button
+                  onClick={() => setContextTranslate("")}
+                  whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
+                  className="absolute right-2 top-1/4 cursor-pointer"
+                >
+                  <X />
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className="flex gap-2">
           {(["unknown", "learning", "learned"] as TWordStatus[]).map((s) => (
             <button
