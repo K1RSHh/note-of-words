@@ -160,6 +160,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             className="px-4 py-3 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
           />
           <motion.button
+            type="button"
             onClick={() => setOriginal("")}
             whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
             className="absolute right-2 top-1/4 cursor-pointer"
@@ -201,6 +202,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             className="px-4 py-3 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
           />
           <motion.button
+            type="button"
             onClick={() => setTranslation("")}
             whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
             className="absolute right-2 top-1/4 cursor-pointer"
@@ -208,17 +210,23 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             <X />
           </motion.button>
         </div>
+
         <motion.button
-          onClick={() => setContextOpen(!contextOpen)}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setContextOpen(!contextOpen);
+          }}
           className="flex w-10 cursor-pointer"
           whileHover={{ scale: 1.1 }}
         >
-          {contextOpen || false ? (
-            <CircleX />
+          {contextOpen ? (
+            <CircleX color="#d4d4d4" strokeWidth={2.5} />
           ) : (
             <CirclePlus color="#d4d4d4" strokeWidth={2.5} />
           )}
         </motion.button>
+
         <AnimatePresence>
           {contextOpen && (
             <motion.div
@@ -237,6 +245,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
                   className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
                 />
                 <motion.button
+                  type="button"
                   onClick={() => setContext("")}
                   whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
                   className="absolute right-2 top-1/4 cursor-pointer"
@@ -253,6 +262,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
                   className="px-4 py-3 pr-7 w-full rounded-2xl bg-neutral-800 text-white border border-neutral-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
                 />
                 <motion.button
+                  type="button"
                   onClick={() => setContextTranslate("")}
                   whileHover={{ scale: 1.2, rotate: 90, color: "#cf1b1b" }}
                   className="absolute right-2 top-1/4 cursor-pointer"
