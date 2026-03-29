@@ -226,7 +226,6 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
             <CirclePlus color="#d4d4d4" strokeWidth={2.5} />
           )}
         </motion.button>
-
         <AnimatePresence>
           {contextOpen && (
             <motion.div
