@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { db, auth } from "../firebase"; // Твій конфіг Firebase
+import { db, auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
