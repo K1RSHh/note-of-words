@@ -97,7 +97,7 @@ function WordList() {
 
       <div className="flex max-w-6xl w-full relative justify-between items-center mb-4 font-bold">
         <p className="text-neutral-500">Found: {sortedWords.length}</p>
-        <div className="relative w-2/3">
+        <div className="relative mx-1 w-2/3">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400"
             size={20}
@@ -110,7 +110,9 @@ function WordList() {
             className="w-full pl-12 pr-4 py-3 bg-white border-2 border-neutral-100 rounded-2xl focus:border-blue-500 outline-none transition-all text-black shadow-sm"
           />
         </div>
-        <WordFilters />
+        <div className="mx-1">
+          <WordFilters />
+        </div>
         <div className="relative z-50 flex items-center justify-center">
           <div
             className="relative flex flex-col items-center justify-center"
@@ -131,7 +133,7 @@ function WordList() {
                   initial={{ opacity: 0, y: 10, x: "-50%" }}
                   animate={{ opacity: 1, y: 0, x: "-50%" }}
                   exit={{ opacity: 0, y: 10, x: "-50%" }}
-                  className="absolute left-1/2 top-10 bg-neutral-800 p-3 rounded-2xl shadow-xl z-50 border border-neutral-700 min-w-37.5"
+                  className="absolute -left-5 md:left-1/2 top-10 bg-neutral-800 p-3 rounded-2xl shadow-xl z-50 border border-neutral-700 min-w-37.5"
                 >
                   <div className="flex flex-col gap-1">
                     {(["all", "unknown", "learning", "learned"] as const).map(
@@ -205,7 +207,7 @@ function WordList() {
                 whileTap={{ scale: 0.8 }}
                 whileHover={{ scale: 1.1 }}
                 onClick={() => toggleWordStatus(word.id)}
-                className="top-5.5 absolute left-10 z-10 cursor-pointer"
+                className="absolute left-2 md:left-20 top-5.5 z-10 cursor-pointer"
                 title="Click to change status"
               >
                 <AnimatePresence mode="wait">
@@ -294,7 +296,7 @@ function WordList() {
                   </div>
                 )}
               </div>
-              <div className="absolute right-15 flex items-center top-5">
+              <div className="absolute right-2 md:right-20 flex items-center top-5">
                 <div className="relative">
                   <motion.button
                     animate={{ rotate: menuOpen === word.id ? 90 : 0 }}
@@ -315,7 +317,7 @@ function WordList() {
                           initial={{ opacity: 0, scale: 0.9, x: -20 }}
                           animate={{ opacity: 1, scale: 1, x: 0 }}
                           exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                          className="absolute flex -top-4 left-8  gap-4 items-center bg-neutral-800 border-2 border-neutral-600 p-2 rounded-xl shadow-lg z-20"
+                          className="absolute flex flex-col md:flex-row md:-top-4 -left-4 md:left-8 gap-4 items-center bg-neutral-800 border-2 border-neutral-600 p-2 rounded-xl shadow-lg z-20"
                         >
                           <button
                             onClick={() => {

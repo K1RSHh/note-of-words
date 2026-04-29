@@ -9,7 +9,7 @@ function Main() {
   const [words] = useWordStore((state) => state.words);
 
   return (
-    <div className="w-full m-auto p-6 relative">
+    <div className="w-full m-auto p-2 md:p-6 relative">
       <div className="max-w-6xl mx-auto flex justify-between items-center mb-8">
         <motion.button
           type="button"

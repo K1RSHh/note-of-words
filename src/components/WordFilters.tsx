@@ -5,12 +5,12 @@ const WordFilters = () => {
   const { sortType, setSortType } = useWordStore();
 
   return (
-    <div className="flex gap-2 justify-center">
+    <div className="flex gap-2 items-center justify-center">
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setSortType("latest")}
-        className={`px-4 py-2 cursor-pointer rounded-full text-sm font-medium ${
+        className={`max-h-9 px-4 py-2 cursor-pointer rounded-full text-sm font-medium ${
           sortType === "latest"
             ? "bg-blue-600 text-white shadow-md"
             : "bg-white text-gray-600 hover:bg-gray-100"
