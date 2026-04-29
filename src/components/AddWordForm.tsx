@@ -117,7 +117,7 @@ const AddWordForm = ({ onClose }: AddWordFormProps) => {
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose(); //
+      if (e.key === "Escape") onClose();
     };
 
     window.addEventListener("keydown", handleEsc);
